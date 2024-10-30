@@ -1,0 +1,14 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 16px 24px;
+}
+
+.root {
+    width: 100%;
+}
