@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import FolderViewer from './FolderViewer'
+import { useEffect, useState } from 'react'
 import { FolderTree } from './components/FolderTree'
-import { electronAPI } from '@electron-toolkit/preload'
 
 function App(): JSX.Element {
   const [ftpUrl, setFtpUrl] = useState<string>('192.168.1.64')

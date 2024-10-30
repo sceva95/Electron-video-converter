@@ -3,10 +3,7 @@ export const styles = {
     height: '100%',
     width: '100%',
     display: 'flex',
-    flexDirection: 'column',
-    ul: {
-      width: '100%'
-    }
+    flexDirection: 'column' as any
   },
   item: {
     display: 'grid',
