@@ -9,9 +9,13 @@
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx",
+    "skipLibCheck": true,
     "baseUrl": ".",
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
     "paths": {
+      "@/*": ["*"],
       "@renderer/*": [
         "src/renderer/src/*"
       ]

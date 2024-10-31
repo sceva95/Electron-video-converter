@@ -1,38 +1,25 @@
 import { useEffect, useState } from 'react'
 import { FolderTree } from './components/FolderTree'
+import Header from './components/Header'
+import { Progress, Spin } from 'antd'
 
 function App(): JSX.Element {
-  const [ftpUrl, setFtpUrl] = useState<string>('192.168.1.64')
-  const [folder, setFolder] = useState<string>('/downloads')
-  const [username, setUsername] = useState<string>('dietpi')
-  const [password, setPassword] = useState<string>('plasma')
-  const [folderTree, setFolderTree] = useState<any>(null)
+  const [folderTree, setFolderTree] = useState<any>()
   const [progress, setProgress] = useState<any>()
-
+  const [isLoading, setIsLoading] = useState(false)
   useEffect(() => {
     window.electron.ipcRenderer.on('progress-update', (event, percentage) => {
       setProgress(percentage)
+      if (isLoading) {
+        setIsLoading(false)
+        setFolderTree(undefined)
+      }
     })
 
     return () => {
       window.electron.ipcRenderer.removeAllListeners('progress-update')
     }
   }, [])
-
-  const connectToFtp = async () => {
-    try {
-      const folderStructure = await window.electron.ipcRenderer.invoke(
-        'connectToFtp',
-        ftpUrl,
-        username,
-        password,
-        folder
-      )
-      setFolderTree(folderStructure)
-    } catch (error) {
-      console.error('Error connecting to FTP:', error)
-    }
-  }
 
   const onClickConvert = () => {
     // Funzione ricorsiva per filtrare i file selezionati
@@ -63,32 +50,13 @@ function App(): JSX.Element {
 
   return (
     <>
-      <input placeholder="FTP URL" value={ftpUrl} onChange={(e) => setFtpUrl(e.target.value)} />
-      <input
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input
-        placeholder="Starting folder"
-        value={folder}
-        onChange={(e) => setFolder(e.target.value)}
-      />
-      <button onClick={() => connectToFtp()}>Connect</button>
-      {progress}
-      {folderTree ? (
+      <Header setIsLoading={setIsLoading} setFolderTree={setFolderTree} />
+      {!folderTree && (isLoading ? <Spin spinning /> : <Progress percent={progress} />)}
+      {folderTree && (
         <>
           <button onClick={onClickConvert}>Convert</button>
           <FolderTree folderTree={folderTree} setFolderTree={setFolderTree} />
         </>
-      ) : (
-        <p>No connection yet.</p>
       )}
     </>
   )
