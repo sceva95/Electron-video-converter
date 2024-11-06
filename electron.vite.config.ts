@@ -7,7 +7,12 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   preload: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+    build: {
+      rollupOptions: {
+        input: 'src/preload/index.mts'
+      }
+    }
   },
   renderer: {
     resolve: {
